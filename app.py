@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QPushButton, QTextEdit
-from memory import MemoryManager
+from memory_manager import MemoryManager
 
 class BestfitApp(QMainWindow):
   def __init__(self):
