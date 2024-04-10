@@ -1,6 +1,6 @@
 # Imports
 from processor import ProcessManager
-from memory import MemoryManager
+from memory_manager import MemoryManager
 
 # Optional: Consider using argparse for command-line arguments
 # import argparse
