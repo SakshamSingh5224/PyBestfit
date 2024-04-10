@@ -1,83 +1,47 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# By Allex Lima <allexlima@unn.edu.br> | www.allexlima.com
-
 import datetime
-import support
+import random  # Assuming random values are used for process attributes
 
-
-class Process(object):
+class Process:
     def __init__(self, name, user):
         self.pid = None
         self.name = name
-        self.context = {}
+        self.context = {}  # Context dictionary for process registers
         self.user = user
         self.priority = None
         self.size = None
         self.start_time = None
         self.state = None
-        self.__pseudo_values_maker()
+        self.__generate_attributes()
 
-    def __pseudo_values_maker(self):
+    def __generate_attributes(self):
         """
-        In this method, I'll generate the values for process attributes.
-        The majority of the values are sorted pseudo-randomly by g_int_value([ab]) function,
-        in nano_os/support.py.
-        :return void
+        Generates pseudo-random values for process attributes.
         """
 
-        """
-        Generate PID number
-        """
-        self.pid = support.g_int_value()
+        self.pid = random.randint(1, 10000)  # Random PID
 
-        """
-        Like all UNIX systems, according with Maziero (2013, 2.5.5, p. 56),
-        -20 means less priority while +19 means more priority in process.
-        """
-        self.priority = support.g_int_value((-20, 19))
+        # Assuming priority range is -20 to 19 (needs clarification)
+        self.priority = random.randint(-20, 19)
 
-        """
-        The process size here follows the computational bits metrics units, according
-        Tanenbaum, A. S., & Zucchi, W. L. (2009) and also ISO/IEC 80000.
-        By default in this code, I'll use kibibytes as measure unit, i.e. KiB, for the process sizes.
-        So, process size = object.size [attribute is an integer value] + KiB [abstract/convention measure unit]
-        """
-        self.size = support.g_int_value()
-        if support.TESTING is True:
-            self.size = support.g_int_value((support.SIZES[0], support.SIZES[-1]))
+        # Process size in KiB (assuming KiB is the desired unit)
+        self.size = random.randint(1, 1024)  # Random size
 
-        """
-        Update context attribute [it's a dict structure] with {register: 0xVALUE}.
-        Registers names were based in MIPS registers and are listed in REGISTERS, in m_manage/support.py.
-        """
-        for i in range(0, support.g_int_value((2, 10)), 1):
-            self.context.update({
-                support.g_list_value(support.REGISTERS): hex(support.g_int_value())
-            })
+        # Context with random register values (needs clarification on register names)
+        for _ in range(random.randint(2, 10)):
+            self.context.update({f"register_{random.randint(1, 32)}": hex(random.randint(0, 16**8))})
 
-        """
-        Get current date and time to attach in start_time attribute in ISO format
-        """
         self.start_time = datetime.datetime.now().isoformat()
-
-        """
-        Set by default state 'waiting' for the process
-        """
-        self.state = support.P_STATES[0]
+        self.state = "waiting"  # Default state
 
 
-class ProcessManager(object):
+class ProcessManager:
     def __init__(self):
-        self.__list = []
+        self.processes = []
 
     @staticmethod
-    def __listing_style(obj):
+    def __process_listing_style(obj):
         """
-        This static method is where can be defined the return process style
-        :param obj: Process object
-        :return: Listing of process values
-        :rtype dict
+        Defines the format for process information display.
         """
         return {
             'pid': obj.pid,
@@ -85,72 +49,48 @@ class ProcessManager(object):
             'user': obj.user,
             'priority': obj.priority,
             'state': obj.state,
-            'size': "{0} KiB".format(obj.size),
+            'size': f"{obj.size} KiB",
             'start_time': obj.start_time,
             'context': obj.context,
-        } if support.TESTING is not True else {'pid': obj.pid, 'size': "{0} KiB".format(obj.size)}
+        } if not hasattr(ProcessManager, 'TESTING') or not ProcessManager.TESTING else {
+            'pid': obj.pid,
+            'size': f"{obj.size} KiB",
+        }
 
-    def __insert(self, process):
+    def create(self, name, user):
         """
-        This 'private' method will insert the object process in a Process list through the append list function
-        :param process:
-        :return:
+        Creates a new process object and adds it to the process list.
         """
-        self.__list.append(process)
-
-    def create(self, nome, user):
-        """
-        This method allow the process object creation and put that object in the ProcessList
-        :param nome: Process name
-        :param user: Process owner
-        :return: void
-        """
-
-        obj = Process(nome, user)
-        self.__insert(obj)
-        return obj.pid
+        process = Process(name, user)
+        self.processes.append(process)
+        return process.pid
 
     def get(self, pid):
         """
-        This method will return the object of process through PID informed
-
-        :param pid: Might contains the process' ID, an integer value
-        :return: The process object
-        :rtype object
+        Returns the process object with the given PID.
         """
-        try:
-            return next(item for item in self.__list if item.pid == pid)
-        except StopIteration:
-            pass
+        for process in self.processes:
+            if process.pid == pid:
+                return process
+        return None
 
     def show(self, pid=None):
         """
-        This method will show a dictionary with all process' values when it's called
-        If is passed the PID parameter, the method will return just info about this process' PID
-        else, a list of dict within all process in a ProcessList will be returned
-        :rtype dict or list
+        Returns information about a specific process or all processes.
         """
-        aux = None
-
         if pid:
-            try:
-                aux = ProcessManager.__listing_style(self.get(pid))
-            except AttributeError:
-                pass
+            process = self.get(pid)
+            if process:
+                return ProcessManager.__process_listing_style(process)
+            else:
+                return None
         else:
-            aux = []
-            for item in range(0, len(self.__list), 1):
-                aux.append(ProcessManager.__listing_style(self.__list[item]))
-
-        return aux
+            return [ProcessManager.__process_listing_style(process) for process in self.processes]
 
     def kill(self, pid):
         """
-        This method will delete the process' object, through PID informed, from
-        the __list attribute list.
-
-        :param pid: Might contains the process' ID (PID), an integer value
-        :return: void
+        Removes the process object with the given PID from the list.
         """
-        self.__list[:] = [item for item in self.__list if item.pid != pid]
+        self.processes = [process for process in self.processes if process.pid != pid]
+
 
