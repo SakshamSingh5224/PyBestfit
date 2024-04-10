@@ -3,7 +3,7 @@
 # By Allex Lima <allexlima@unn.edu.br> | www.allexlima.com
 
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore
 import interface
 import webbrowser
 import nano_os as myos
