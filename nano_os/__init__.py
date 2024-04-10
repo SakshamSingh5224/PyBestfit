@@ -1,5 +1,5 @@
 # Imports (assuming these are custom modules within the project)
-from process import ProcessManager
+from processor import ProcessManager
 from memory import MemoryManager
 
 # Optional: Consider using argparse for command-line arguments
