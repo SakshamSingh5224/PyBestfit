@@ -1,5 +1,6 @@
 import datetime
-import random  # Assuming random values are used for process attributes
+import random
+
 
 class Process:
     def __init__(self, name, user):
@@ -16,19 +17,22 @@ class Process:
     def __generate_attributes(self):
         """
         Generates pseudo-random values for process attributes.
+        You can adjust the ranges for priority and size based on your needs.
         """
 
         self.pid = random.randint(1, 10000)  # Random PID
 
-        # Assuming priority range is -20 to 19 (needs clarification)
-        self.priority = random.randint(-20, 19)
+        # Assuming priority range is -20 (low) to 19 (high)
+        self.priority = random.randrange(-20, 20)
 
         # Process size in KiB (assuming KiB is the desired unit)
         self.size = random.randint(1, 1024)  # Random size
 
-        # Context with random register values (needs clarification on register names)
+        # Context with random register values (replace with actual register names)
         for _ in range(random.randint(2, 10)):
-            self.context.update({f"register_{random.randint(1, 32)}": hex(random.randint(0, 16**8))})
+            register_name = f"reg_{random.randint(1, 32)}"
+            register_value = hex(random.randint(0, 16**8))
+            self.context.update({register_name: register_value})
 
         self.start_time = datetime.datetime.now().isoformat()
         self.state = "waiting"  # Default state
@@ -37,25 +41,26 @@ class Process:
 class ProcessManager:
     def __init__(self):
         self.processes = []
+        self.TESTING = False  # Set to True for potential testing modifications
 
-    @staticmethod
-    def __process_listing_style(obj):
+    def __process_listing_style(self, obj):
         """
         Defines the format for process information display.
         """
-        return {
-            'pid': obj.pid,
-            'name': obj.name,
-            'user': obj.user,
-            'priority': obj.priority,
-            'state': obj.state,
-            'size': f"{obj.size} KiB",
-            'start_time': obj.start_time,
-            'context': obj.context,
-        } if not hasattr(ProcessManager, 'TESTING') or not ProcessManager.TESTING else {
-            'pid': obj.pid,
-            'size': f"{obj.size} KiB",
+        output_data = {
+            "pid": obj.pid,
+            "name": obj.name,
+            "user": obj.user,
+            "priority": obj.priority,
+            "state": obj.state,
+            "size": f"{obj.size} KiB",
+            "start_time": obj.start_time,
+            "context": obj.context,
         }
+        if self.TESTING:
+            # Potential modifications for testing (example: exclude context)
+            del output_data["context"]
+        return output_data
 
     def create(self, name, user):
         """
@@ -81,16 +86,44 @@ class ProcessManager:
         if pid:
             process = self.get(pid)
             if process:
-                return ProcessManager.__process_listing_style(process)
+                return self.__process_listing_style(process)
             else:
                 return None
         else:
-            return [ProcessManager.__process_listing_style(process) for process in self.processes]
+            return [self.__process_listing_style(process) for process in self.processes]
 
     def kill(self, pid):
         """
         Removes the process object with the given PID from the list.
+        Raises an exception if the process is not found.
         """
-        self.processes = [process for process in self.processes if process.pid != pid]
+        try:
+            self.processes.remove([process for process in self.processes if process.pid == pid][0])
+        except IndexError:
+            raise ProcessNotFoundException(f"Process with PID {pid} not found")
+
+class ProcessNotFoundException(Exception):
+    """
+    Custom exception raised when a process with a given PID is not found.
+    """
+    pass
+
+
+# Example usage
+if __name__ == "__main__":
+    process_manager = ProcessManager()
+
+    # Create some processes
+    process_manager.create("Process 1", "user1")
+    process_manager.create("Process 2", "user2")
+    process_manager.create("Process 3", "user3")
+
+    # Show information about all processes
+    print("All processes:")
+    print(process_manager.show())
+
+    # Show information about a specific process
+    process_info = process_manager.show(2)
+
 
 
