@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # By Allex Lima <allexlima@unn.edu.br> | www.allexlima.com
 
-
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 import interface
 import webbrowser
 import nano_os as myos
@@ -12,9 +11,8 @@ import operator
 
 
 class MyTableModel(QtCore.QAbstractTableModel):
-
     def __init__(self, parent, my_list, header, *args):
-        QtCore.QAbstractTableModel.__init__(self, parent, *args)
+        super(MyTableModel, self).__init__(parent, *args)
         self.my_list = my_list
         self.header = header
 
@@ -38,17 +36,16 @@ class MyTableModel(QtCore.QAbstractTableModel):
 
     def sort(self, col, order):
         """sort table by given column number col"""
-        self.emit(QtCore.SIGNAL("layoutAboutToBeChanged()"))
-        self.my_list = sorted(self.my_list,
-                              key=operator.itemgetter(col))
+        self.layoutAboutToBeChanged.emit()
+        self.my_list = sorted(self.my_list, key=operator.itemgetter(col))
         if order == QtCore.Qt.DescendingOrder:
             self.my_list.reverse()
-        self.emit(QtCore.SIGNAL("layoutChanged()"))
+        self.layoutChanged.emit()
 
 
-class BestfitApp(QtGui.QMainWindow, interface.Ui_BestFit):
+class BestfitApp(QtWidgets.QMainWindow, interface.Ui_BestFit):
     def __init__(self):
-        super(self.__class__, self).__init__()
+        super(BestfitApp, self).__init__()
         self.setupUi(self)
         self.menuAjudar.addAction(self.actionTeam.triggered.connect(self.about))
         self.menuAjudar.addAction(self.actionGithub.triggered.connect(self.github))
@@ -62,18 +59,18 @@ class BestfitApp(QtGui.QMainWindow, interface.Ui_BestFit):
         self.memoryAlloc.setDisabled(True)
 
     def alert(self, text, title="Alert", code=2):
-        message = QtGui.QMessageBox(self)
+        message = QtWidgets.QMessageBox(self)
         message.setIcon(code)
-        message.setText(unicode(text))
+        message.setText(text)
         message.setWindowTitle(title)
         message.setWindowModality(QtCore.Qt.ApplicationModal)
         message.exec_()
 
     def about(self):
         self.alert(
-            u"\nTrabalho desenvolvido para compor a nota parcial da 3ª ARE da disciplina de " +
-            u"Sistemas Operacionais, ministrada pelo Prof.ª M.Sc. Ângela Lima. " +
-            u"\n\nDesenvolvido por: Allex Lima, Daniel Bispo, Paulo Moraes e Renan Barroncas",
+            "\nTrabalho desenvolvido para compor a nota parcial da 3ª ARE da disciplina de " +
+            "Sistemas Operacionais, ministrada pelo Prof.ª M.Sc. Ângela Lima. " +
+            "\n\nDesenvolvido por: Allex Lima, Daniel Bispo, Paulo Moraes e Renan Barroncas",
             title="Sobre",
             code=1
         )
@@ -177,3 +174,9 @@ class BestfitApp(QtGui.QMainWindow, interface.Ui_BestFit):
     @staticmethod
     def github():
         webbrowser.open("https://github.com/allexlima/PyBestfit")
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets
+
