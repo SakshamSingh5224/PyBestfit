@@ -1,110 +1,82 @@
-# -*- coding: utf-8 -*-
+from PyQt5 import QtCore, QtWidgets
 
-# Form implementation generated from reading ui file 'interface.ui'
-#
-# Created by: PyQt4 UI code generator 4.11.4
-#
-# WARNING! All changes made in this file will be lost!
-
-from PyQt4 import QtCore, QtGui
-
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
-except AttributeError:
-    def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_BestFit(object):
     def setupUi(self, BestFit):
-        BestFit.setObjectName(_fromUtf8("BestFit"))
+        BestFit.setObjectName("BestFit")
         BestFit.resize(800, 500)
         BestFit.setMinimumSize(QtCore.QSize(800, 500))
         BestFit.setMaximumSize(QtCore.QSize(800, 500))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("/opt/PyBestfit/img/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/icons/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         BestFit.setWindowIcon(icon)
-        self.centralwidget = QtGui.QWidget(BestFit)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.memoryAlloc = QtGui.QPushButton(self.centralwidget)
+        self.centralwidget = QtWidgets.QWidget(BestFit)
+        self.centralwidget.setObjectName("centralwidget")
+
+        self.memoryAlloc = QtWidgets.QPushButton(self.centralwidget)
         self.memoryAlloc.setGeometry(QtCore.QRect(637, 420, 131, 41))
-        self.memoryAlloc.setObjectName(_fromUtf8("memoryAlloc"))
-        self.randomCheck = QtGui.QCheckBox(self.centralwidget)
+        self.memoryAlloc.setObjectName("memoryAlloc")
+
+        self.randomCheck = QtWidgets.QCheckBox(self.centralwidget)
         self.randomCheck.setGeometry(QtCore.QRect(350, 420, 141, 41))
-        self.randomCheck.setObjectName(_fromUtf8("randomCheck"))
-        self.tabWidget = QtGui.QTabWidget(self.centralwidget)
+        self.randomCheck.setObjectName("randomCheck")
+
+        self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(20, 20, 751, 391))
-        self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
-        self.processTab = QtGui.QWidget()
-        self.processTab.setObjectName(_fromUtf8("processTab"))
-        self.tableMemory = QtGui.QTableView(self.processTab)
+        self.tabWidget.setObjectName("tabWidget")
+
+        self.processTab = QtWidgets.QWidget()
+        self.processTab.setObjectName("processTab")
+
+        self.tableMemory = QtWidgets.QTableView(self.processTab)
         self.tableMemory.setGeometry(QtCore.QRect(0, 0, 749, 355))
-        self.tableMemory.setObjectName(_fromUtf8("tableMemory"))
-        self.tabWidget.addTab(self.processTab, _fromUtf8(""))
-        self.memoryTab = QtGui.QWidget()
-        self.memoryTab.setAccessibleName(_fromUtf8(""))
-        self.memoryTab.setObjectName(_fromUtf8("memoryTab"))
-        self.tableProcess = QtGui.QTableView(self.memoryTab)
+        self.tableMemory.setObjectName("tableMemory")
+
+        self.tabWidget.addTab(self.processTab, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.processTab), "Memory")
+
+        self.memoryTab = QtWidgets.QWidget()
+        self.memoryTab.setAccessibleName("")
+        self.memoryTab.setObjectName("memoryTab")
+
+        self.tableProcess = QtWidgets.QTableView(self.memoryTab)
         self.tableProcess.setGeometry(QtCore.QRect(0, 0, 749, 355))
-        self.tableProcess.setObjectName(_fromUtf8("tableProcess"))
-        self.tabWidget.addTab(self.memoryTab, _fromUtf8(""))
-        self.logTab = QtGui.QWidget()
-        self.logTab.setObjectName(_fromUtf8("logTab"))
-        self.logView = QtGui.QTextEdit(self.logTab)
+        self.tableProcess.setObjectName("tableProcess")
+
+        self.tabWidget.addTab(self.memoryTab, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(memoryTab), "Processes")
+
+        self.logTab = QtWidgets.QWidget()
+        self.logTab.setObjectName("logTab")
+
+        self.logView = QtWidgets.QTextEdit(self.logTab)
         self.logView.setEnabled(True)
         self.logView.setGeometry(QtCore.QRect(0, 0, 761, 361))
-        self.logView.setAutoFormatting(QtGui.QTextEdit.AutoAll)
+        self.logView.setAutoFormatting(QtWidgets.QTextEdit.AutoAll)
         self.logView.setReadOnly(True)
         self.logView.setTabStopWidth(20)
-        self.logView.setObjectName(_fromUtf8("logView"))
-        self.tabWidget.addTab(self.logTab, _fromUtf8(""))
-        self.updateInfo = QtGui.QPushButton(self.centralwidget)
+        self.logView.setObjectName("logView")
+
+        self.tabWidget.addTab(self.logTab, "")
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.logTab), "Logs")
+
+        self.updateInfo = QtWidgets.QPushButton(self.centralwidget)
         self.updateInfo.setGeometry(QtCore.QRect(497, 420, 131, 41))
-        self.updateInfo.setObjectName(_fromUtf8("updateInfo"))
+        self.updateInfo.setObjectName("updateInfo")
+
         BestFit.setCentralWidget(self.centralwidget)
-        self.menubar = QtGui.QMenuBar(BestFit)
+
+        self.menubar = QtWidgets.QMenuBar(BestFit)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuAjudar = QtGui.QMenu(self.menubar)
+        self.menubar.setObjectName("menubar")
+
+        self.menuAjudar = QtWidgets.QMenu(self.menubar)
         self.menuAjudar.setSeparatorsCollapsible(True)
-        self.menuAjudar.setObjectName(_fromUtf8("menuAjudar"))
+        self.menuAjudar.setObjectName("menuAjudar")
         BestFit.setMenuBar(self.menubar)
-        self.actionGithub = QtGui.QAction(BestFit)
+
+        self.actionGithub = QtWidgets.QAction(BestFit)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("/opt/PyBestfit/img/github.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionGithub.setIcon(icon1)
-        self.actionGithub.setIconVisibleInMenu(True)
-        self.actionGithub.setObjectName(_fromUtf8("actionGithub"))
-        self.actionTeam = QtGui.QAction(BestFit)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(_fromUtf8("/opt/PyBestfit/img/about.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionTeam.setIcon(icon2)
-        self.actionTeam.setIconVisibleInMenu(True)
-        self.actionTeam.setObjectName(_fromUtf8("actionTeam"))
-        self.menuAjudar.addAction(self.actionGithub)
-        self.menuAjudar.addAction(self.actionTeam)
-        self.menubar.addAction(self.menuAjudar.menuAction())
+        icon1.addPixmap(QtGui.QPixmap(":/icons/github.png"),
 
-        self.retranslateUi(BestFit)
-        self.tabWidget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(BestFit)
-
-    def retranslateUi(self, BestFit):
-        BestFit.setWindowTitle(_translate("BestFit", "Bestfit Memory Allocation Algorithm", None))
-        self.memoryAlloc.setText(_translate("BestFit", "Memory Alloc", None))
-        self.randomCheck.setText(_translate("BestFit", "Testing mode", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.processTab), _translate("BestFit", "Memory", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.memoryTab), _translate("BestFit", "Processes", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.logTab), _translate("BestFit", "Logs", None))
-        self.updateInfo.setText(_translate("BestFit", "Update", None))
-        self.menuAjudar.setTitle(_translate("BestFit", "More", None))
-        self.actionGithub.setText(_translate("BestFit", "Github", None))
-        self.actionTeam.setText(_translate("BestFit", "About", None))
 
