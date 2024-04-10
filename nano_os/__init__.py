@@ -23,7 +23,7 @@ def main():
 
     # Create process and memory managers
     process_manager = ProcessManager()
-    memory_manager = MemoryManager()
+    memory_manager = MemoryManager(total_memory=1024)  # Set total available memory
 
     # Example process creation (replace with your actual logic)
     processes = [
@@ -32,9 +32,11 @@ def main():
         process_manager.create_process("Process 3", 300),
     ]
 
-    # Allocate memory for processes
+    # Allocate memory for processes (handle potential allocation failures)
     for process in processes:
-        memory_manager.allocate_memory(process)
+        if not memory_manager.allocate_memory(process):
+            print(f"Insufficient memory to allocate for process {process['name']}")
+            continue  # Skip to next process if allocation fails
 
     # Simulate process execution (replace with your logic)
     for process in processes:
@@ -53,4 +55,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
