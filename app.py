@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# By Allex Lima <allexlima@unn.edu.br> | www.allexlima.com
+from PyQt5 import QtWidgets, QtGui
 
-from ui_manager import *
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(['BestFit Algorithm'])
+    app = QtWidgets.QApplication(['BestFit Algorithm'])  # Use QtWidgets for modern PyQt5 applications
     window = BestfitApp()
     window.show()
-    app.exec_()
+    sys.exit(app.exec_())  # Use sys.exit for cleaner exit handling
