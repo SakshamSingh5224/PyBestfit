@@ -1,8 +1,16 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow  # Import specific classes
-# Import other necessary classes from ui_manager (if any)
-if __name__ == "__main__":
-    app = QApplication(['BestFit Algorithm'])  # Initialize the application
-    window = BestfitApp()  # Assuming BestfitApp is defined elsewhere
-    window.show()  # Make the window visible
-    sys.exit(app.exec_())  # Start the event loop and exit gracefully
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QPushButton, QTextEdit
+from memory import MemoryManager
+
+class BestfitApp(QMainWindow):
+  def __init__(self):
+    super().__init__()
+    self.memory_manager = MemoryManager(10)  # Create a memory manager with 10 blocks
+    self.init_ui()
+
+  def init_ui(self):
+    self.setWindowTitle("Best-Fit Memory Management")
+
+    # Layout
+    self.main_layout = QV
+
 
